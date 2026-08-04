@@ -157,6 +157,15 @@ a {
   unicode-bidi: bidi-override;
 }
 
+.logo-phone {
+  display: flex;
+  align-items: center;
+}
+.navbar-brand{
+  color: $white;
+  font-size: 3rem;
+}
+
 @media (max-width: $web-view-break-point) {
   .footer-container {
     flex-direction: column;

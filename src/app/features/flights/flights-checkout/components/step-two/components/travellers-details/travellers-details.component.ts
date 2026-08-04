@@ -35,6 +35,7 @@ import { CountrySelectionModalComponent } from './country-selection-modal/countr
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
+  standalone: false,
   selector: 'app-travellers-details',
   templateUrl: './travellers-details.component.html',
   styleUrls: ['./travellers-details.component.scss'],
@@ -54,6 +55,7 @@ export class TravellersDetailsComponent implements OnInit, AfterViewInit, OnDest
   passengerCount = 0;
   filteredCountries: { [index: number]: any[] } = {};
   departureDate: string = '0000-00-00';
+  returnDepartureDate: string = '0000-00-00';
   isExpanded: boolean = false;
   flightData?: selectedFlight;
   private destroy$ = new Subject<void>();
@@ -84,17 +86,6 @@ export class TravellersDetailsComponent implements OnInit, AfterViewInit, OnDest
       this.onSubmit();
     });
     this.initializeFilteredCountries();
-
-    for (let i = 0; i < this.usersArray.length; i++) {
-      this.minDates[i] = this.getMinDatepickerDate(
-        this.departureDate,
-        this.getPassengerForm(i).get('PassengerType')?.value,
-      );
-      this.maxDates[i] = this.getMaxDatepickerDate(
-        this.departureDate,
-        this.getPassengerForm(i).get('PassengerType')?.value,
-      );
-    }
   }
 
   ngAfterViewInit(): void {
@@ -299,6 +290,8 @@ export class TravellersDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.passengerCount = adultNum + childNum + infantNum;
     this.departureDate = this.flightData.searchCriteria.flights[0].departingOnDate;
 
+    this.returnDepartureDate = this.flightData.searchCriteria.flights[this.flightData.searchCriteria.flights.length - 1].departingOnDate;
+
     this.flightCheckoutService.buildUsersForm(adultNum, childNum, infantNum, true, false);
 
     this.initializeFilteredCountries();
@@ -308,6 +301,22 @@ export class TravellersDetailsComponent implements OnInit, AfterViewInit, OnDest
       passengerForm.addControl('birthDate', new FormControl(''));
       passengerForm.addControl('PassportExpiration', new FormControl(''));
       passengerForm.addControl('countryName', new FormControl('', [Validators.required, this.countryValidator()]));
+
+      const namePattern = '^[a-zA-Z\\s]*$';
+      passengerForm.get('firstName')?.addValidators(Validators.pattern(namePattern));
+      passengerForm.get('lastName')?.addValidators(Validators.pattern(namePattern));
+
+      const passType = passengerForm.get('PassengerType')?.value;
+      const isChild = passType === 'CHD' || passType === 'CNN';
+
+      this.minDates[i] = this.getMinDatepickerDate(
+        isChild ? this.returnDepartureDate : this.departureDate,
+        passType,
+      );
+      this.maxDates[i] = this.getMaxDatepickerDate(
+        isChild ? this.returnDepartureDate : this.departureDate,
+        passType,
+      );
 
       passengerForm.get('birthDate')?.setValidators(Validators.required);
       passengerForm
@@ -663,7 +672,7 @@ export class TravellersDetailsComponent implements OnInit, AfterViewInit, OnDest
     if (errors['required']) {
       errorKey = 'checkout.ERRORS.REQUIRED';
     } else if (errors['pattern']) {
-      errorKey = 'checkout.ERRORS.PATTERN';
+      errorKey = 'checkout.ERRORS.LETTERS_ONLY';
     } else if (errors['minlength']) {
       errorKey = 'checkout.ERRORS.MINLENGTH';
       errorParams = { ...errorParams, requiredLength: errors['minlength'].requiredLength };

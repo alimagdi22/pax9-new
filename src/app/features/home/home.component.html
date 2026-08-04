@@ -11,7 +11,9 @@
 </div>
 
 <main class="container">
-  <img class="promo" src="assets/images/home/banner.png" />
+  <div class="promo d-flex align-items-center justify-content-center">
+    <span class="text-white fw-bold">{{ 'home.promo' | translate }}</span>
+  </div>
   <app-popular-dest />
   <app-why-us />
   @if (

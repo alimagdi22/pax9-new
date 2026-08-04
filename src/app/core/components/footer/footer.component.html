@@ -2,8 +2,11 @@
   <footer class="footer mt-5">
     <div class="footer-container">
       <div class="d-flex flex-column align-items-start">
-        <img class="logo" src="assets/icons/logo-white.svg" />
-
+        <div class="logo-phone">
+          <a class="navbar-brand py-0 ms-3 text-dark" routerLink="/">
+            Pax.9
+          </a>
+        </div>
         <p class="text-start mt-5" [class.text-end]="translate.currentLang === 'ar'">
           {{ 'footer.description' | translate }}
         </p>
@@ -69,7 +72,11 @@
   <div class="footer-desktop">
     <div class="head mb-2">
       <div class="logo-section">
-        <img class="logo" src="assets/icons/logo-white.svg" width="100" />
+        <div class="logo-phone">
+          <a class="navbar-brand py-0 ms-3FLYTO" routerLink="/">
+            Pax.9
+          </a>
+        </div>
         <p class="logo-text" [class.text-end]="translate.currentLang === 'ar'">
           {{ 'footer.description' | translate }}
         </p>

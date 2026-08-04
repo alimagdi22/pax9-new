@@ -33,6 +33,7 @@ export class LoginComponent {
   private auth = inject(Auth);
   router = inject(Router);
   error: boolean = false;
+  showPassword = false;
 
   ngOnInit(): void {
     this.authService.initLoginForm();

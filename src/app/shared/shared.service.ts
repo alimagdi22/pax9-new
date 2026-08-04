@@ -44,7 +44,7 @@ export class SharedService {
   contactForm: any;
   userForm: any;
 
-  screenWidth = 0;
+  screenWidth = 1200;
   webViewBreakPoint = 1180;
 
   loader: boolean = true;
@@ -70,6 +70,8 @@ export class SharedService {
   isFirstRequest = true;
 
   selectedGateway: IPaymentGateway | null = null;
+
+  registerEmail: string = '';
 
   selectedBaggageIndex: number = 0;
   showFlightDetails(airItinerary: IAirItinerary | null): void {

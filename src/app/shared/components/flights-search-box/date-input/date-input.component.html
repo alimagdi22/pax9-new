@@ -1,5 +1,6 @@
 <div
   class="airport-input date-width text-center"
+  
   [class.web-input-border-raidus-left]="
     (!isReturnDate && translate.currentLang === 'en') || (isReturnDate && translate.currentLang === 'ar')
   "
@@ -13,7 +14,7 @@
   #calenderTrigger
 >
   @if (sharedService.screenWidth >= sharedService.webViewBreakPoint) {
-    <label class="text-start" [class.text-end]="translate.currentLang === 'ar'">{{
+    <label class="text-start text-black" [class.text-end]="translate.currentLang === 'ar'">{{
       (isReturnDate ? 'searchBox.return' : 'searchBox.depart') | translate
     }}</label>
     @if (isReturnDate) {
@@ -36,7 +37,7 @@
       </div>
     }
   } @else {
-    <label class="text-center">{{ (isReturnDate ? 'searchBox.return' : 'searchBox.depart') | translate }}</label>
+    <label class="text-center text-black">{{ (isReturnDate ? 'searchBox.return' : 'searchBox.depart') | translate }}</label>
     @if (isReturnDate) {
       <div class="input-box text-center">
         {{
@@ -77,13 +78,13 @@
     [dayTemplate]="calendarTemplate"
     outsideDays="hidden"
     [minDate]="calendarMinDate"
-    [startDate]="calendarStartDate"
+  [startDate]="calendarStartDate"
     appDatepickerRtl
   />
 
   <ng-template #calendarTemplate let-date let-focused="focused" (click)="$event.stopPropagation()">
     <span
-      class="custom-day"
+      class="custom-day text-black"
       (click)="onDateSelection(date, index); closeCalendar($event)"
       [class.focused]="(isReturnDate ? isReturnSelected(date) : false) || isDepartSelected(date, index)"
       [class.range]="isReturnDate ? isRange(date) : false"

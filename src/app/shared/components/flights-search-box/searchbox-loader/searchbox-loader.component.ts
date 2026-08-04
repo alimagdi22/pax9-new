@@ -5,6 +5,8 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './searchbox-loader.component.html',
-  styleUrl: './searchbox-loader.component.scss',
+  styleUrl: './searchbox-loader.component.scss'
 })
-export class SearchboxLoaderComponent {}
+export class SearchboxLoaderComponent {
+
+}

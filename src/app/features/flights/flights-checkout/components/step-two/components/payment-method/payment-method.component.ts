@@ -14,6 +14,7 @@ interface IFareDetails {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-payment-method',
   templateUrl: './payment-method.component.html',
   styleUrl: './payment-method.component.scss',
@@ -52,7 +53,7 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
 
   searchParams: any = {};
   brandedFare: IFareDetails = {};
-
+  isPayLater = false;
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       this.searchParams = {
@@ -74,10 +75,12 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
   loadPaymentData(userCurrency: string, paymentLocation: string, body: IAirItinerary): void {
     this.paymentData$ = this.flightCheckoutApiService.addPaymentGateways(userCurrency, paymentLocation, body);
     this.paymentData$.subscribe((gateways: mergedGates[]) => {
+      this.isPayLater = gateways.some((g) => g.GatewayType === 'PayLater');
       if (!this.selectedGatway) {
-        const knetIndex = gateways.findIndex((g) => g.PaymentMethod?.toLowerCase() === 'hostedknet');
-        if (knetIndex !== -1) {
-          this.selectOption(knetIndex, gateways[knetIndex]);
+        const PaytabsIndex = gateways.findIndex((g) => g.PaymentMethod?.toLowerCase() === 'PaytabsCC'.toLowerCase());
+        console.log(PaytabsIndex);
+        if (PaytabsIndex !== -1) {
+          this.selectOption(PaytabsIndex, gateways[PaytabsIndex]);
         }
       }
     });
@@ -238,6 +241,9 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
       if (this.sharedService.userForm.valid) {
         if (this.selectedGatway.GatewayType === 'MPGS') {
           PaymentSession.updateSessionFromForm('card');
+        } else if (this.selectedGatway.GatewayType === 'PayLater') {
+          this.payLater();
+          return;
         }
 
         this.flightCheckoutService.newPaymentSaveBooking(
@@ -255,6 +261,29 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
   submitPayment(event: Event): void {
     event.preventDefault();
     this.sharedService.triggerSubmit();
+  }
+
+  payLater() {
+    this.sharedService.triggerSubmit();
+
+    // Wait for trimming and validation to complete before checking form validity
+    setTimeout(() => {
+      if (this.sharedService.userForm.valid) {
+        this.flightCheckoutService.processPayLater(
+          this.selectedFlight.searchCriteria.currency,
+          'notPremium',
+          this.selectedFlight.pcc,
+          this.selectedTicket === 'branded' ? this.brandedFare.brandId! : this.brandedFareId
+        );
+      }
+    }, 0);
+  }
+
+  closePayLaterPopup(success: boolean) {
+    this.flightCheckoutService.payLaterSuccess = null;
+    if (success) {
+      this.router.navigate(['/']);
+    }
   }
 
   redirectToHome() {

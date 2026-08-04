@@ -368,3 +368,116 @@ h2 {
     display: block;
   }
 }
+
+
+/* Merged from PAX.9 */
+.payment-pay-later-btn {
+  border-radius: 10px;
+  background-color: transparent;
+  border: 2px solid map-get($blue, 'one');
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 100%;
+  color: map-get($blue, 'one');
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &.en {
+    padding: 10px 18px;
+  }
+}
+
+.pay-later-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.pay-later-popup {
+  background-color: white;
+  padding: 40px 30px;
+  border-radius: 16px;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.success-icon {
+  font-size: 72px;
+  color: #2ecc71;
+  margin-bottom: 20px;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.popup-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #2c3e50;
+}
+
+.popup-message {
+  font-size: 16px;
+  color: #596a7b;
+  line-height: 1.6;
+}
+
+.popup-contact-details {
+  background-color: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.contact-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+  display: block;
+}
+
+.contact-link {
+  font-size: 14px;
+  color: map-get($blue, 'one');
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: map-get($blue, 'two');
+  }
+}
+
+.popup-button {
+  background-color: map-get($blue, 'one');
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 200px;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+}

@@ -35,7 +35,7 @@ import { DatepickerRtlDirective } from '../../../directives/datepickerrtl.direct
     TranslatePipe,
     MatMenuModule,
     NgbDatepickerModule,
-    DatepickerRtlDirective,
+    DatepickerRtlDirective
   ],
   templateUrl: './date-input.component.html',
   styleUrl: './date-input.component.scss',
@@ -91,17 +91,17 @@ export class DateInputComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    const today = this.calendar.getToday();
+     const today = this.calendar.getToday();
 
-    // Set displayed start date
-    const departingValue = this.flightSearchService.flightsArray.at(this.index).get('departingD')?.value;
-    this.departDate = this.generateCalendarDate(departingValue);
+  // Set displayed start date
+  const departingValue = this.flightSearchService.flightsArray.at(this.index).get('departingD')?.value;
+  this.departDate = this.generateCalendarDate(departingValue);
 
-    // Calendar start should show the selected date if available
-    this.calendarStartDate = this.departDate ? this.departDate : today;
+  // Calendar start should show the selected date if available
+  this.calendarStartDate = this.departDate ? this.departDate : today;
 
-    // But minDate should remain as today (no restriction from depart date)
-    this.calendarMinDate = today;
+  // But minDate should remain as today (no restriction from depart date)
+  this.calendarMinDate = today;
   }
 
   ngOnChanges(simpleChange: SimpleChanges): void {
@@ -120,11 +120,11 @@ export class DateInputComponent implements OnInit, OnChanges {
     this.departDate = this.generateCalendarDate(
       this.flightSearchService.flightsArray.at(this.index).get('departingD')?.value,
     );
-    const departingValue = this.flightSearchService.flightsArray.at(this.index).get('departingD')?.value;
-    this.departDate = this.generateCalendarDate(departingValue);
-    const today = this.calendar.getToday();
+     const departingValue = this.flightSearchService.flightsArray.at(this.index).get('departingD')?.value;
+  this.departDate = this.generateCalendarDate(departingValue);
+  const today = this.calendar.getToday();
 
-    this.calendarStartDate = this.departDate ? this.departDate : today;
+  this.calendarStartDate = this.departDate ? this.departDate : today;
   }
 
   closeCalendar(e: Event) {
@@ -220,7 +220,7 @@ export class DateInputComponent implements OnInit, OnChanges {
   }
 
   isDisabled(date: NgbDate) {
-    date.before(this.minDate);
+    return this.calendarMinDate ? date.before(this.calendarMinDate) : false;
   }
 
   isHovered(date: NgbDate) {
@@ -228,21 +228,24 @@ export class DateInputComponent implements OnInit, OnChanges {
   }
 
   isRange(date: NgbDate) {
-    const departingDate = this.generateCalendarDate(
-      this.flightSearchService.flightsArray.at(this.index).get('departingD')?.value,
-    );
+  const departingDate = this.generateCalendarDate(
+    this.flightSearchService.flightsArray.at(this.index).get('departingD')?.value,
+  );
 
-    const returnValue = this.flightSearchService.searchFlight.get('returnDate')?.value;
-    const returnDate = returnValue ? this.generateCalendarDate(returnValue) : null;
+  const returnValue = this.flightSearchService.searchFlight.get('returnDate')?.value;
+  const returnDate = returnValue ? this.generateCalendarDate(returnValue) : null;
 
-    // Convert to NgbDate objects for easier comparison
-    const depart = new NgbDate(departingDate.year, departingDate.month, departingDate.day);
-    const hover = this.hoveredDate;
-    const ret = returnDate ? new NgbDate(returnDate.year, returnDate.month, returnDate.day) : null;
+  // Convert to NgbDate objects for easier comparison
+  const depart = new NgbDate(departingDate.year, departingDate.month, departingDate.day);
+  const hover = this.hoveredDate;
+  const ret = returnDate ? new NgbDate(returnDate.year, returnDate.month, returnDate.day) : null;
 
-    // Highlight when hovering OR after selecting both dates
-    return (hover && date.after(depart) && date.before(hover)) || (ret && date.after(depart) && date.before(ret));
-  }
+  // Highlight when hovering OR after selecting both dates
+  return (
+    (hover && date.after(depart) && date.before(hover)) ||
+    (ret && date.after(depart) && date.before(ret))
+  );
+}
   isReturnSelected(date: NgbDate) {
     const returnDate = this.generateCalendarDate(this.flightSearchService.searchFlight.get('returnDate')?.value);
 

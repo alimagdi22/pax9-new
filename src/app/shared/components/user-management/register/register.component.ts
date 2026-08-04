@@ -1,6 +1,6 @@
 import { NgStyle } from '@angular/common';
 import { Component, inject, output } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AuthService, REGISTER_STATUS } from 'rp-travel-ui';
@@ -26,6 +26,8 @@ export class RegisterComponent {
 
   subscription = new Subscription();
   error = false;
+  showPassword = false;
+  showConfirmPassword = false;
 
   ngOnInit(): void {
     this.authService.initRegisterForm();
@@ -41,6 +43,12 @@ export class RegisterComponent {
         },
       }),
     );
+
+    // Add name validation
+    const namePattern = '^[a-zA-Z\\s]*$';
+    this.registerForm.get('firstName')?.addValidators(Validators.pattern(namePattern));
+    this.registerForm.get('lastName')?.addValidators(Validators.pattern(namePattern));
+    this.registerForm.get('username')?.addValidators(Validators.pattern(namePattern));
   }
 
   onSubmit() {
@@ -50,6 +58,7 @@ export class RegisterComponent {
     if (this.authService.registerForm.invalid) {
       this.error = true;
     } else {
+      this.sharedService.registerEmail = this.authService.registerForm.value.email;
       this.authService.regitserSubmit();
     }
   }
@@ -73,15 +82,30 @@ export class RegisterComponent {
   }
 
   get getFirstNameErrorMessage() {
-    return this.authService.getFirstNameErrorMessage;
+    return (control: AbstractControl, lang: 'en' | 'ar' | undefined) => {
+      if (control.hasError('pattern')) {
+        return lang === 'en' ? 'Only letters and spaces are allowed' : 'مسموح بالأحرف والمسافات فقط';
+      }
+      return this.authService.getFirstNameErrorMessage(control, lang);
+    };
   }
 
   get getLastNameErrorMessage() {
-    return this.authService.getLastNameErrorMessage;
+    return (control: AbstractControl, lang: 'en' | 'ar' | undefined) => {
+      if (control.hasError('pattern')) {
+        return lang === 'en' ? 'Only letters and spaces are allowed' : 'مسموح بالأحرف والمسافات فقط';
+      }
+      return this.authService.getLastNameErrorMessage(control, lang);
+    };
   }
 
   get getUserNameErrorMessage() {
-    return this.authService.getUserNameErrorMessage;
+    return (control: AbstractControl, lang: 'en' | 'ar' | undefined) => {
+      if (control.hasError('pattern')) {
+        return lang === 'en' ? 'Only letters and spaces are allowed' : 'مسموح بالأحرف والمسافات فقط';
+      }
+      return this.authService.getUserNameErrorMessage(control, lang);
+    };
   }
 
   get getPhoneErrorMessage() {

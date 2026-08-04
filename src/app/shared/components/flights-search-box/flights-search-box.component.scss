@@ -11,7 +11,7 @@
   font-family: Poppins;
   font-weight: 700;
   font-size: 18px;
-  padding-inline-start: 12%;
+  // padding-inline-start: 12%;
 
   p {
     margin: 0;
@@ -243,4 +243,11 @@ app-date-input {
 
 .add-return {
   cursor: pointer;
+}
+
+
+.switch-icon{
+  width:13%;
+  border: 1px solid black;
+  border-radius: 50%;
 }

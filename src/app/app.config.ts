@@ -16,13 +16,14 @@ import {
   HTTP_INTERCEPTORS,
   HttpClient,
   provideHttpClient,
-  withInterceptors,
+  withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { TokenInterceptor } from './core/interceptors/token.interceptor';
 import { DatepickerI18nService } from './core/services/datepicker-i18n.service';
 import { NgbDatepickerConfig, NgbDatepickerI18n } from '@ng-bootstrap/ng-bootstrap';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 registerLocaleData(localeAr);
 
@@ -33,7 +34,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptorsFromDi(), withFetch()),
     provideTranslateService({
       loader: {
         provide: TranslateLoader,
@@ -83,5 +84,6 @@ export const appConfig: ApplicationConfig = {
       },
       deps: [TranslateService],
     },
+    provideClientHydration(withEventReplay()),
   ],
 };

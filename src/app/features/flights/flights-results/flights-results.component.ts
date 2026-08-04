@@ -8,6 +8,7 @@ import { GoogleTagManagerService } from 'angular-google-tag-manager';
 import { ISortItem } from '../../../shared/models/sortItem.model';
 import { SharedService } from '../../../shared/shared.service';
 @Component({
+  standalone: false,
   selector: 'app-flights-results',
   templateUrl: './flights-results.component.html',
   styleUrl: './flights-results.component.scss',
@@ -115,19 +116,27 @@ export class FlightsResultsComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.flightResultService.notify.subscribe({
         next: () => {
-          if (!this.flightResultService.orgnizedResponce.length) {
+          if (!this.flightResultService.orgnizedResponce.length || !this.flightResultService.orgnizedResponce[0]?.length) {
             return;
           }
+          console.log(this.flightResultService.response, 'res');
+
           for (let i = 0; i < this.sortItems.length; i++) {
             this.flightResultService.sortMyResult(i + 1);
 
-            this.sortItems[i].price = this.flightResultService.orgnizedResponce[0][0].itinTotalFare.amount;
-            this.sortItems[i].currency = this.flightResultService.orgnizedResponce[0][0].itinTotalFare.currencyCode;
+            const firstItin = this.flightResultService.orgnizedResponce[0]?.[0];
+            if (firstItin) {
+              this.sortItems[i].price = firstItin.itinTotalFare.amount;
+              this.sortItems[i].currency = firstItin.itinTotalFare.currencyCode;
+            }
           }
           this.flightResultService.sortMyResult(1);
 
-          this.sortItems[0].price = this.flightResultService.orgnizedResponce[0][0].itinTotalFare.amount;
-          this.sortItems[0].currency = this.flightResultService.orgnizedResponce[0][0].itinTotalFare.currencyCode;
+          const firstItinDefault = this.flightResultService.orgnizedResponce[0]?.[0];
+          if (firstItinDefault) {
+            this.sortItems[0].price = firstItinDefault.itinTotalFare.amount;
+            this.sortItems[0].currency = firstItinDefault.itinTotalFare.currencyCode;
+          }
 
           setTimeout(() => {
             this.filterHeight = this.filterComponent?.nativeElement.offsetHeight;
@@ -151,19 +160,25 @@ export class FlightsResultsComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       this.flightResultService.filterForm.valueChanges.subscribe(() => {
-        if (!this.flightResultService.orgnizedResponce.length) {
+        if (!this.flightResultService.orgnizedResponce.length || !this.flightResultService.orgnizedResponce[0]?.length) {
           return;
         }
         for (let i = 0; i < this.sortItems.length; i++) {
           this.flightResultService.sortMyResult(i + 1);
 
-          this.sortItems[i].price = this.flightResultService.orgnizedResponce[0][0].itinTotalFare.amount;
-          this.sortItems[i].currency = this.flightResultService.orgnizedResponce[0][0].itinTotalFare.currencyCode;
+          const firstItin = this.flightResultService.orgnizedResponce[0]?.[0];
+          if (firstItin) {
+            this.sortItems[i].price = firstItin.itinTotalFare.amount;
+            this.sortItems[i].currency = firstItin.itinTotalFare.currencyCode;
+          }
         }
         this.flightResultService.sortMyResult(1);
 
-        this.sortItems[0].price = this.flightResultService.orgnizedResponce[0][0].itinTotalFare.amount;
-        this.sortItems[0].currency = this.flightResultService.orgnizedResponce[0][0].itinTotalFare.currencyCode;
+        const firstItinDefault = this.flightResultService.orgnizedResponce[0]?.[0];
+        if (firstItinDefault) {
+          this.sortItems[0].price = firstItinDefault.itinTotalFare.amount;
+          this.sortItems[0].currency = firstItinDefault.itinTotalFare.currencyCode;
+        }
       }),
     );
 

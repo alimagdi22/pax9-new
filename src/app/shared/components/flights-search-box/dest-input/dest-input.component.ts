@@ -7,10 +7,12 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  PLATFORM_ID,
   Renderer2,
   TemplateRef,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { AbstractControl, FormControl } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -19,7 +21,9 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { FlightSearchService, RpTravelUiModule } from 'rp-travel-ui';
 import { of, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
-import { initialRecommendedAirports } from '../../../../core/constants/recommendedAirports';
+import {
+  initialRecommendedAirports,
+} from '../../../../core/constants/recommendedAirports';
 import { IAirPort, IAirPortTranslated } from '../../../../core/models/airport.model';
 import { TDestinations } from '../../../../core/models/destiations.model';
 import { FlightSharedService } from '../../../../core/services/flightShared.service';
@@ -30,12 +34,18 @@ import { style } from '@angular/animations';
 @Component({
   selector: 'app-dest-input',
   standalone: true,
-  imports: [MatAutocompleteModule, MatProgressSpinnerModule, RpTravelUiModule, InputHeaderComponent, TranslatePipe],
+  imports: [
+    MatAutocompleteModule,
+    MatProgressSpinnerModule,
+    RpTravelUiModule,
+    InputHeaderComponent,
+    TranslatePipe,
+  ],
   templateUrl: './dest-input.component.html',
   styleUrl: './dest-input.component.scss',
   host: {
-    style: 'flex-grow: 1',
-  },
+    style: 'flex-grow: 1'
+  }
 })
 export class DestInputComponent implements OnInit, OnDestroy {
   @Input({ required: true }) destination: TDestinations = 'landing';
@@ -43,10 +53,10 @@ export class DestInputComponent implements OnInit, OnDestroy {
   @Input({ required: true }) index = -1;
 
   @ViewChild('destinationInput', { static: true }) inputRef!: ElementRef;
-  @Output() destinationTypeChange = new EventEmitter<{
-    dest: 'departing' | 'landing';
-    type: 'City' | 'Airport';
-  }>();
+@Output() destinationTypeChange = new EventEmitter<{ 
+  dest: 'departing' | 'landing'; 
+  type: 'City' | 'Airport'; 
+}>();
 
   public translate = inject(TranslateService);
   public flightSharedService = inject(FlightSharedService);
@@ -59,6 +69,8 @@ export class DestInputComponent implements OnInit, OnDestroy {
   private renderer = inject(Renderer2);
   private modalService = inject(NgbModal);
   private initialRecommendedAirports = initialRecommendedAirports;
+  private platformId = inject(PLATFORM_ID);
+  public isBrowser = isPlatformBrowser(this.platformId);
 
   ngOnInit(): void {
     this.updateInputValue(this.flightItem.get(this.destination)?.value);
@@ -92,7 +104,7 @@ export class DestInputComponent implements OnInit, OnDestroy {
           map((data: any) => {
             data.length = 5;
             return data;
-          }),
+          })
         )
         .subscribe({
           next: (data) => {
@@ -104,18 +116,16 @@ export class DestInputComponent implements OnInit, OnDestroy {
           },
           complete: () => {
             this.isLoading = false;
-          },
+          }
         }),
     );
 
-    let form = JSON.parse(localStorage.getItem('form') as string);
-    let airports = JSON.parse(localStorage.getItem(this.destination) as string) as (IAirPortTranslated & {
-      _isCitySelection?: boolean;
-    })[];
-
-    if (form && airports[this.index]) {
+    let form = this.isBrowser ? JSON.parse(localStorage.getItem('form') as string) : null;
+    let airports = (this.isBrowser ? JSON.parse(localStorage.getItem(this.destination) as string) : null) as (IAirPortTranslated & { _isCitySelection?: boolean })[];
+    
+    if (form && airports && airports[this.index]) {
       const cachedAirport = airports[this.index];
-
+      
       if (cachedAirport._isCitySelection) {
         const selectedCity = `${cachedAirport[this.sharedService.lang].cityName},${cachedAirport[this.sharedService.lang].cityCode}`;
         this.flightItem.get(this.destination)?.setValue(selectedCity);
@@ -123,10 +133,6 @@ export class DestInputComponent implements OnInit, OnDestroy {
         this.updateInputValue(displayValue);
       } else {
         this.onSelectAirport(this.destination, cachedAirport[this.sharedService.lang]);
-        // const currentValue = this.flightItem.get(this.destination)?.value;
-        // if ((!currentValue || currentValue.trim() === '') && form && airports[this.index]) {
-        //   this.onSelectAirport(this.destination, airports[this.index][this.sharedService.lang]);
-        // }
       }
     }
   }
@@ -154,12 +160,12 @@ export class DestInputComponent implements OnInit, OnDestroy {
     this.updateInputValue(selectedAirport);
     this.flightSharedService.cities = [];
     this.modalService.dismissAll();
-
+    
     // If it's from a grouped selection, store with city selection flag
     if (isFromGroup && 'cityCode' in airport) {
       this.storageAirport(dest, airport as any, false);
     }
-
+    
     this.emitDestinationType(dest, false);
   }
 
@@ -167,34 +173,34 @@ export class DestInputComponent implements OnInit, OnDestroy {
     // Set the form value to "cityName,cityCode" to match the airport format
     const selectedCity = `${airport[this.sharedService.lang].cityName},${airport[this.sharedService.lang].cityCode}`;
     this.flightItem.get(dest)?.setValue(selectedCity);
-
+    
     // Display cityName and countryName in the input
     const displayValue = `${airport[this.sharedService.lang].cityName}, ${airport[this.sharedService.lang].countryName}`;
     this.updateInputValue(displayValue);
-
+    
     // Store the airport with city selection flag
     this.storageAirport(dest, airport, true);
-
+    
     this.flightSharedService.cities = [];
     this.modalService.dismissAll();
     this.emitDestinationType(dest, true);
   }
-  private emitDestinationType(dest: TDestinations, isCity: boolean) {
-    const type = isCity ? 'City' : 'Airport';
-    this.destinationTypeChange.emit({ dest, type });
-  }
-  getGroupedCities(): { city: string; country: string; airports: IAirPortTranslated[] }[] {
-    const groups: { [key: string]: { city: string; country: string; airports: IAirPortTranslated[] } } = {};
-
-    this.flightSharedService.cities.forEach((airport) => {
+private emitDestinationType(dest: TDestinations, isCity: boolean) {
+  const type = isCity ? 'City' : 'Airport';
+  this.destinationTypeChange.emit({ dest, type });
+}
+  getGroupedCities(): {city: string, country: string, airports: IAirPortTranslated[]}[] {
+    const groups: {[key: string]: {city: string, country: string, airports: IAirPortTranslated[]}} = {};
+    
+    this.flightSharedService.cities.forEach(airport => {
       const lang = this.sharedService.lang;
       const cityKey = airport[lang].cityName + '|' + airport[lang].countryName;
-
+      
       if (!groups[cityKey]) {
         groups[cityKey] = {
           city: airport[lang].cityName,
           country: airport[lang].countryName,
-          airports: [],
+          airports: []
         };
       }
       groups[cityKey].airports.push(airport);
@@ -204,11 +210,12 @@ export class DestInputComponent implements OnInit, OnDestroy {
   }
 
   storageAirport(dest: TDestinations, airport: IAirPortTranslated, isCitySelection: boolean = false) {
+    if (!this.isBrowser) return;
     let airports = JSON.parse(localStorage.getItem(this.destination) ?? '[]');
     // Store both the airport data and whether it was a city selection
     airports[this.index] = {
       ...airport,
-      _isCitySelection: isCitySelection, // Add a flag to indicate city selection
+      _isCitySelection: isCitySelection // Add a flag to indicate city selection
     };
     localStorage.setItem(dest, JSON.stringify(airports));
   }

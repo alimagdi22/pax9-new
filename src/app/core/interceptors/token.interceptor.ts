@@ -1,4 +1,5 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable, from, throwError } from 'rxjs';
 import { Router } from '@angular/router';
@@ -10,6 +11,8 @@ import { SharedService } from '../../shared/shared.service';
 export class TokenInterceptor implements HttpInterceptor {
   authService = inject(AuthService);
   sharedService = inject(SharedService);
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser = isPlatformBrowser(this.platformId);
 
   segments = ['HistoryAndUpcomingFlights', 'getUser', 'editUser', 'changePassword', 'SaveBooking'];
 
@@ -22,7 +25,7 @@ export class TokenInterceptor implements HttpInterceptor {
       }
     });
 
-    if (isIncludesSegment && localStorage.getItem('token') && localStorage.getItem('tokenHash')) {
+    if (this.isBrowser && isIncludesSegment && localStorage.getItem('token') && localStorage.getItem('tokenHash')) {
       return from(this.authService.getToken()).pipe(
         switchMap((token) => {
           if (!token || this.authService.isTokenExpired()) {
@@ -37,11 +40,11 @@ export class TokenInterceptor implements HttpInterceptor {
           return next.handle(req);
         }),
         catchError((error) => {
-          if (error.status === 401) {
+          if (error && error.status === 401) {
             this.authService.removeToken();
             this.sharedService.userManagementNotifier.next(1);
           }
-          return throwError(error);
+          return throwError(() => error);
         }),
       );
     }

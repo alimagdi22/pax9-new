@@ -29,6 +29,8 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
 
   isSuccessfullyReset = false;
   error = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
 
   email = '';
   token = '';

@@ -8,7 +8,7 @@ export const whyUsCards = [
 
     en: {
       title: 'Countless options',
-      description: 'pax9 compares flights from 450+ airlines to bring you the best deals.',
+      description: 'PAX.9 compares flights from 450+ airlines to bring you the best deals.',
       image: 'world-wide.svg',
     },
   },
