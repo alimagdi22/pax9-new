@@ -1,0 +1,51 @@
+/* =========================================================
+   COLOR TOKENS — pax9-new
+   Original palette mapped to the new brand system
+   ========================================================= */
+
+/* --- Orange (CTA) --- */
+$orange-one: #FF5F1F;        /* --one-color   | Primary CTA orange */
+
+/* --- Blue (Primary brand) --- */
+$blue-one:   #146BAC;        /* --eleven-color | Primary blue — headers, buttons, tabs, sliders */
+$blue-two:   #3E7DC3;        /* --thirteen-color | Mid blue — lighter accent */
+$blue-three: #d4e4f3;        /* --sixteen-color | Very light blue — card/section backgrounds */
+
+/* --- Gray scale --- */
+$gray-light:    #D9D9D9;     /* --two-color    | Light gray — borders, dividers */
+$gray-medium:   #5B5D5E;     /* --three-color  | Medium gray — secondary / muted text */
+$gray-silver:   #BDBDBD;     /* --fourteen-color | Silver gray — input borders */
+$gray-disabled: #808080;     /* --fifteen-color | Disabled / placeholder text */
+
+/* --- Navy / Dark --- */
+$navy-dark: #333959;         /* --ten-color    | Dark navy — footer background */
+$navy-deep: #140B4C;         /* --seventeen-color | Deep navy — login/signup CTA */
+$indigo:    #47477E;         /* --four-color / --six-color | Indigo accent */
+
+/* --- Neutrals --- */
+$black: #000000;             /* --eight-color  | Primary text */
+$white: #FFFFFF;             /* --nine-color   | Backgrounds, text on dark */
+
+/* --- Page / Section Backgrounds --- */
+$page-bg:        #F5F5F5;    /* Checkout / general page background */
+$modal-bg:       #f4f4f4;    /* Login / Signup modal background */
+$calendar-faded: #FEEAE1;    /* Calendar date-range faded (orange tint) */
+
+/* --- Social colors (login/signup) --- */
+$social-facebook: #2F5B9C;
+$social-twitter:  #37BFF1;
+
+/* --- Success (kept for refundable/non-refundable states) --- */
+$green-one:   #66a928;
+$green-two:   #21910a;
+$green-three: #1f8f0a;
+$green-four:  #f0fff1;
+
+/* --- Error / Validation (kept for form validation) --- */
+$red-one: #f71c1c;
+$red-two: #f60d0d;
+
+/* =========================================================
+   BREAK POINTS
+   ========================================================= */
+$web-view-break-point: 1180px;

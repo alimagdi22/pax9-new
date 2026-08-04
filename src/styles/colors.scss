@@ -1,0 +1,46 @@
+@import 'variables';
+
+/* Orange — CTA */
+$orange: (
+  'one': $orange-one,        /* #FF5F1F — Primary CTA */
+);
+
+/* Blue — Primary brand */
+$blue: (
+  'one':   $blue-one,        /* #146BAC — headers, buttons, tabs, sliders */
+  'two':   $blue-two,        /* #3E7DC3 — mid/lighter blue accent */
+  'three': $blue-three,      /* #d4e4f3 — very light blue backgrounds */
+);
+
+/* Gray — neutral scale */
+$gray: (
+  'light':    $gray-light,   /* #D9D9D9 — borders, dividers */
+  'medium':   $gray-medium,  /* #5B5D5E — secondary / muted text */
+  'silver':   $gray-silver,  /* #BDBDBD — input borders */
+  'disabled': $gray-disabled,/* #808080 — disabled / placeholder */
+);
+
+/* Navy — dark backgrounds */
+$navy: (
+  'dark': $navy-dark,        /* #333959 — footer background */
+  'deep': $navy-deep,        /* #140B4C — login/signup CTA */
+);
+
+/* Indigo — accent */
+$indigo-map: (
+  'one': $indigo,            /* #47477E — indigo accent */
+);
+
+/* Green — success / refundable states */
+$green: (
+  'one':   $green-one,       /* #66a928 */
+  'two':   $green-two,       /* #21910a */
+  'three': $green-three,     /* #1f8f0a */
+  'four':  $green-four,      /* #f0fff1 */
+);
+
+/* Red — validation / error / non-refundable */
+$red: (
+  'one': $red-one,           /* #f71c1c */
+  'two': $red-two,           /* #f60d0d */
+);

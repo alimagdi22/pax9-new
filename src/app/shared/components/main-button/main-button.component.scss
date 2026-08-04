@@ -1,0 +1,16 @@
+@import 'colors';
+
+.gradient-button {
+  background: linear-gradient(90deg, map-get($map: $green, $key: 'two') 0%, map-get($map: $green, $key: 'one') 100%);
+  background-size: 150% 100%;
+  background-position: center;
+  color: $white;
+  border: none;
+  padding: 10px 20px;
+
+  transition: background-position 0.4s ease-in-out;
+
+  &:hover {
+    background-position: right;
+  }
+}
