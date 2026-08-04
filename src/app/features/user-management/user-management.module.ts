@@ -11,6 +11,7 @@ import { FlightCardComponent } from './components/flight-card/flight-card.compon
 import { HotelCardComponent } from './components/hotel-card/hotel-card.component';
 import { TicketsComponent } from './components/flight-card/tickets/tickets.component';
 import { SignOutAlertModalComponent } from '../../shared/components/user-management/sign-out-alert-modal/sign-out-alert-modal.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { SignOutAlertModalComponent } from '../../shared/components/user-managem
     FlightCardComponent,
     HotelCardComponent,
     TicketsComponent,
+    ResetPasswordComponent,
   ],
   imports: [CommonModule, UserManagementRoutingModule, SharedModule, SignOutAlertModalComponent],
 })
