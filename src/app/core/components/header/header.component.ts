@@ -1,6 +1,6 @@
 import { Component, HostListener, inject, OnDestroy, OnInit, TemplateRef, ViewChild, PLATFORM_ID } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
-import { ActivatedRoute, NavigationEnd, RouterLink } from '@angular/router';
+import { NavigationEnd, RouterLink } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -12,10 +12,8 @@ import {
   HomePageService,
   RESET_PASSWORD_STATUS,
   UserProfileService,
-  VERIFY_TOKEN_STATUS,
 } from 'rp-travel-ui';
 import { filter, Subscription } from 'rxjs';
-import { ForgetPasswordComponent } from '../../../shared/components/user-management/forget-password/forget-password.component';
 import { LoginComponent } from '../../../shared/components/user-management/login/login.component';
 import { OtpComponent } from '../../../shared/components/user-management/otp/otp.component';
 import { RegisterComponent } from '../../../shared/components/user-management/register/register.component';
@@ -37,7 +35,6 @@ import { PhoneIcon } from './icons/phone-icon.component';
   imports: [
     LoginComponent,
     RegisterComponent,
-    ForgetPasswordComponent,
     OtpComponent,
     ResetPasswordComponent,
     RouterLink,
@@ -55,7 +52,6 @@ import { PhoneIcon } from './icons/phone-icon.component';
 export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('loginTemplate') loginTemplate!: TemplateRef<any>;
   @ViewChild('registerTemplate') registerTemplate!: TemplateRef<any>;
-  @ViewChild('forgetPasswordTemplate') forgetPasswordTemplate!: TemplateRef<any>;
 
   public sharedService = inject(SharedService);
   public translate = inject(TranslateService);
@@ -69,10 +65,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private userProfileService = inject(UserProfileService);
   private modalService = inject(NgbModal);
-  private route = inject(ActivatedRoute);
   private subscription = new Subscription();
-  private email = '';
-  private token = '';
   private router = inject(Router);
   isMenuCollapsed = true;
   selectedLang = 'EN';
@@ -139,29 +132,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.route.queryParamMap.subscribe((params) => {
-        this.email = params.get('email') ?? '';
-        this.token = params.get('token') ? decodeURIComponent(params.get('token')!) : '';
-
-        if (this.email && this.token) {
-          this.showModal(this.forgetPasswordTemplate);
-          this.authService.verifyResetPasswordToken(this.token, this.email);
-        }
-      }),
-    );
-
-    this.subscription.add(
-      this.authService.notify.subscribe({
-        next: (status) => {
-          if (status === VERIFY_TOKEN_STATUS.faild) {
-            console.error('Token is not valid');
-            this.modalService.dismissAll();
-          }
-        },
-      }),
-    );
-
-    this.subscription.add(
       this.googleAuthService.notify.subscribe({
         next: (status) => {
           if (this.isBrowser && localStorage.getItem('token')) {
@@ -169,20 +139,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.userProfileService.getUserProfile();
           } else {
             this.authenticated = false;
-          }
-        },
-      }),
-    );
-
-    this.subscription.add(
-      this.userProfileService.notify.subscribe({
-        next: () => {
-          if (
-            this.userProfileService.user.email.toLowerCase() !== this.email.toLowerCase() &&
-            this.email.toLowerCase()
-          ) {
-            this.authService.removeToken();
-            this.modalService.dismissAll();
           }
         },
       }),
@@ -199,11 +155,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (this.isBrowser && localStorage.getItem('token')) {
             this.userProfileService.getUserProfile();
             this.sharedService.isAuthenticated = true;
-          } else if (status === RESET_PASSWORD_STATUS.success) {
-            // Swal.fire({
-            //   icon: 'success',
-            //   title: this.translate.currentLang === 'en' ? 'Password Updated Successfully' : 'تم تحديث كلمة السر بنجاج'
-            // });
           } else {
             this.sharedService.isAuthenticated = false;
           }

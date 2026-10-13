@@ -112,10 +112,6 @@
   <app-otp (dismiss)="modal.dismiss()" />
 </ng-template>
 
-<ng-template #forgetPasswordTemplate let-modal>
-  <app-forget-password (dismiss)="modal.dismiss()" (login)="showModal(loginTemplate)" />
-</ng-template>
-
 <ng-template #restPasswordTemplate let-modal>
   <app-reset-password (login)="showModal(loginTemplate)" />
 </ng-template>

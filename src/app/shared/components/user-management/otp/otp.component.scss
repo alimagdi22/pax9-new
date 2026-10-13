@@ -1,5 +1,74 @@
 @import 'colors';
 
+.otp-container {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.otp-header {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: map-get($map: $blue, $key: 'one');
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  margin: 0;
+
+  &__title {
+    font-weight: 600;
+    font-size: 18px;
+    color: $white;
+    line-height: 1.4;
+  }
+
+  &__close-btn {
+    position: static !important;
+    height: auto !important;
+    background-color: rgba($white, 0.15) !important;
+    color: $white !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba($white, 0.25) !important;
+    padding: 6px 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+    outline: none !important;
+    text-decoration: none !important;
+
+    svg {
+      flex-shrink: 0;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    span {
+      font-size: 14px;
+      font-weight: 500;
+      color: $white;
+    }
+
+    &:hover {
+      background-color: rgba($white, 0.3) !important;
+      border-color: rgba($white, 0.5) !important;
+      color: $white !important;
+
+      svg {
+        transform: scale(1.1);
+      }
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba($white, 0.5) !important;
+    }
+  }
+}
+
 .otp {
   display: flex;
   flex-direction: column;

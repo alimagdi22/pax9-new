@@ -169,6 +169,7 @@
     },
 
     "otp": {
+      "resend": "Resend OTP",
       "title": "One Time Password",
       "message": "We send you an OTP. Please, check your email.",
       "error": "OTP is not valid."

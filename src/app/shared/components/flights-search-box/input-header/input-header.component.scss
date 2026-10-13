@@ -5,21 +5,55 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
+  padding: 12px 20px;
   margin-bottom: 20px;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
 
-  button {
-    background-color: map-get($map: $blue, $key: 'one');
-    color: $white;
-    font-size: 16px;
-    border-radius: 10px;
-    border: none;
-    padding: 0.5rem 1rem;
-  }
-
-  span {
-    font-weight: bold;
+  > span {
+    font-weight: 600;
     font-size: 18px;
     color: $white;
+    line-height: 1.4;
+  }
+
+  button {
+    background-color: rgba($white, 0.15);
+    color: $white;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    border: 1px solid rgba($white, 0.25);
+    padding: 6px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    outline: none;
+
+    svg {
+      flex-shrink: 0;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    span {
+      font-size: 14px;
+      font-weight: 500;
+      color: $white;
+    }
+
+    &:hover {
+      background-color: rgba($white, 0.3);
+      border-color: rgba($white, 0.5);
+
+      svg {
+        transform: scale(1.1);
+      }
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba($white, 0.5);
+    }
   }
 }

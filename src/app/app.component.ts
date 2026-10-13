@@ -88,7 +88,31 @@ export class AppComponent implements OnInit {
       },
     };
 
-    this.environmentService.envConfiguration(envFly);
+    let envRP = {
+      offlineSeats: 'http://41.223.55.14:7025',
+      searchflow: 'https://flightsearch.round-pixel.net',
+      BookingFlow: 'https://flightflow.round-pixel.net',
+      FareRules: 'https://flightprov.round-pixel.net',
+      asm: 'https://backofficeapi.round-pixel.net',
+      Apihotels: 'https://hotelsapi.round-pixel.net',
+      users: 'https://flightsearch.round-pixel.net',
+      // users: 'https://usersapi.round-pixel.net',
+      admin: 'https://adminapi.round-pixel.net/',
+      getDPayment: 'https://adminapi.round-pixel.net/',
+      bookHotels: 'https://hotels.round-pixel.net',
+      prepay: 'https://prepayapi.round-pixel.net',
+      backOffice: 'https://backofficeapi.round-pixel.net',
+      FlightTop: 'https://flightsearch.round-pixel.net',
+      offers: {
+        getAll: 'http://41.215.243.36:7893/api/GetAllOffersAPI?POS=',
+        getByID: 'http://41.215.243.36:7893/api/GetOfferByIdAPI?OfferId=',
+        BookOffer: 'http://41.215.243.36:7895/api/BookOffer',
+        RetriveItineraryDetails: '/api/Admin/RetriveItineraryDetails',
+      },
+    };
+
+
+    this.environmentService.envConfiguration(envRP);
 
     this.translate.setTranslation('en', en);
     this.translate.setTranslation('ar', ar);
